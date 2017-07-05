@@ -1,0 +1,84 @@
+variables:
+  designate-vip:        &designate-vip          10.5.4.2
+machines:
+  '100':
+    series: trusty
+  '101':
+    series: trusty
+  '102':
+    series: trusty
+  '103':
+    series: trusty
+  '104':
+    series: trusty
+  '105':
+    series: trusty
+  '106':
+    series: trusty
+  '107':
+    series: trusty
+  '108':
+    series: trusty
+relations:
+- - designate
+  - mysql
+- - designate
+  - rabbitmq-server
+- - designate 
+  - keystone
+- - designate:ha
+  - designate-hacluster:ha
+- - designate
+  - designate-bind
+- - keystone
+  - mysql
+series: trusty
+services:
+  keystone:
+    charm: cs:keystone
+    num_units: 1
+    to:
+    - 100
+  mysql:
+    charm: cs:mysql
+    num_units: 1
+    to:
+    - 101
+  rabbitmq-server:
+    charm: cs:rabbitmq-server
+    num_units: 1
+    to:
+    - 102
+  designate:
+    charm: ./designate-5
+    num_units: 3
+    options:
+      debug: "true"
+      enable-host-header: "true"
+      openstack-origin: "cloud:trusty-mitaka"
+      region: "RegionOne"
+      use-syslog: "true"
+      vip: *designate-vip
+      verbose: "true"
+      nameservers: 'test-net.eu.'
+    to:
+    - 103
+    - 104
+    - 105
+  designate-hacluster:
+    charm: cs:hacluster
+    series: trusty
+    options:
+      corosync_transport: 'unicast'
+      cluster_count: 3
+  designate-bind:
+    charm: cs:designate-bind
+    num_units: 3
+    options:
+      debug: "true"
+      verbose: "true"
+      use-syslog: "true"
+    to:
+    - 106
+    - 107
+    - 108

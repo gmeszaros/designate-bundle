@@ -1,0 +1,185 @@
+"options":
+  "debug":
+    "default": !!bool "false"
+    "type": "boolean"
+    "description": "Enable debug logging"
+  "verbose":
+    "default": !!bool "false"
+    "type": "boolean"
+    "description": "Enable verbose logging"
+  "use-syslog":
+    "type": "boolean"
+    "default": !!bool "false"
+    "description": |
+      Setting this to True will allow supporting services to log to syslog.
+
+  "openstack-origin":
+    "default": "distro"
+    "type": "string"
+    "description": |
+      Repository from which to install OpenStack.
+
+      May be one of the following:
+
+        distro (default)
+        ppa:somecustom/ppa (PPA name must include OpenStack Release)
+        deb url sources entry|key id
+        or a supported Ubuntu Cloud Archive pocket.
+
+      Supported Ubuntu Cloud Archive pockets include:
+
+        cloud:trusty-liberty
+        cloud:trusty-juno
+        cloud:trusty-kilo
+        cloud:trusty-liberty
+        cloud:trusty-mitaka
+
+      Note that updating this setting to a source that is known to
+      provide a later version of OpenStack will trigger a software
+      upgrade.
+  "os-admin-network":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      The IP address and netmask of the OpenStack Admin network (e.g.,
+      192.168.0.0/24)
+      .
+      This network will be used for admin endpoints.
+  "os-internal-network":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      The IP address and netmask of the OpenStack Internal network (e.g.,
+      192.168.0.0/24)
+      .
+      This network will be used for internal endpoints.
+  "os-public-network":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      The IP address and netmask of the OpenStack Public network (e.g.,
+      192.168.0.0/24)
+      .
+      This network will be used for public endpoints.
+  "os-public-hostname":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      The hostname or address of the public endpoints created for neutron-api
+      in the keystone identity provider.
+      .
+      This value will be used for public endpoints. For example, an
+      os-public-hostname set to 'neutron-api.example.com' with ssl enabled
+      will create the following endpoint for neutron-api:
+      .
+      https://neutron-api.example.com:9696/
+  "region":
+    "default": "RegionOne"
+    "type": "string"
+    "description": "OpenStack Region"
+  "haproxy-server-timeout":
+    "type": "int"
+    "default": !!int "30000"
+    "description": |
+      Server timeout configuration in ms for haproxy, used in HA
+      configurations.
+  "haproxy-client-timeout":
+    "type": "int"
+    "default": !!int "30000"
+    "description": |
+      Client timeout configuration in ms for haproxy, used in HA
+      configurations.
+  "haproxy-queue-timeout":
+    "type": "int"
+    "default": !!int "5000"
+    "description": |
+      Queue timeout configuration in ms for haproxy, used in HA
+      configurations.
+  "haproxy-connect-timeout":
+    "type": "int"
+    "default": !!int "5000"
+    "description": |
+      Connect timeout configuration in ms for haproxy, used in HA
+      configurations.
+  "vip":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      Virtual IP(s) to use to front API services in HA configuration.
+
+      If multiple networks are being used, a VIP should be provided for each
+      network, separated by spaces.
+  "vip_iface":
+    "type": "string"
+    "default": "eth0"
+    "description": |
+      Default network interface to use for HA vip when it cannot be
+      automatically determined.
+  "vip_cidr":
+    "type": "int"
+    "default": !!int "24"
+    "description": |
+      Default CIDR netmask to use for HA vip when it cannot be automatically
+      determined.
+  "ssl_cert":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      SSL certificate to install and use for API ports.  Setting this value
+      and ssl_key will enable reverse proxying, point Glance's entry in the
+      Keystone catalog to use https, and override any certficiate and key
+      issued by Keystone (if it is configured to do so).
+  "ssl_key":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      SSL key to use with certificate specified as ssl_cert.
+  "ssl_ca":
+    "type": "string"
+    "default": !!null ""
+    "description": |
+      SSL CA to use with the certificate and key provided - this is only
+      required if you are providing a privately signed ssl_cert and ssl_key.
+  "dns-slaves":
+    "default": !!null ""
+    "type": "string"
+    "description": |
+      List of DNS slaves which will accept addzone/delzone rndc commands from
+      Designate. List is of the form slave_ip:rndc_port:rndc_key. This should
+      only be used if DNS servers are outside of Juju control. Using the
+      designate-bind charm is the prefered approach.
+  "nova-domain":
+    "default": !!null ""
+    "type": "string"
+    "description": "Domain to add records for new instances to"
+  "nova-domain-email":
+    "default": !!null ""
+    "type": "string"
+    "description": "Email address of the person responsible for the domain."
+  "nameservers":
+    "default": !!null ""
+    "type": "string"
+    "description": |
+      Space delimited list of nameservers. These are the nameservers that have
+      been provided to the domain registrar in order to delegate the domain to
+      Designate. e.g. "ns1.example.com ns2.example.com"
+  "neutron-domain":
+    "default": !!null ""
+    "type": "string"
+    "description": "Domain to add  floating ip records to"
+  "neutron-domain-email":
+    "default": !!null ""
+    "type": "string"
+    "description": "Email address of the person responsible for the domain."
+  "neutron-record-format":
+    "default": "%(octet0)s-%(octet1)s-%(octet2)s-%(octet3)s.%(zone)s"
+    "type": "string"
+    "description": "Format of floating ip global records"
+  "nova-record-format":
+    "default": "%(hostname)s.%(tenant_id)s.%(zone)s"
+    "type": "string"
+    "description": "Format of floating ip global records"
+  "enable-host-header":
+    "default": !!bool "false"
+    "type": "boolean"
+    "description": "Enables host request headers."
